@@ -5,6 +5,16 @@
 {%  endblock %}
 
 {% block content %}
+    <div class="container">
+    <h1>Контакты</h1>
+    {%  for contact in contacts %}
+
+        <ul>
+        <li>{{ contact.phone }} || {{ contact.email }}</li>
+        </ul>
+    {%  endfor %}
+
+    <h1>Форма создания контакта</h1>
     <form action="{% url 'catalog:contacts' %}" method="post">
     {% csrf_token %}
         <table>
@@ -12,5 +22,6 @@
     </table>
     <input type="submit" value="Отправить">
 </form>
+    </div>
 
 {%  endblock %}

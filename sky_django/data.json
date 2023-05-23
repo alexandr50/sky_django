@@ -1,0 +1,26 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "title": "Одежда",
+      "description": "Верхняя одежда разных брендов"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "title": "Обувь",
+      "description": "Обувь разных брендов"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "title": "Аксесуары",
+      "description": "Аксессуары"
+    }
+  }
+]

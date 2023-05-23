@@ -6,4 +6,9 @@
 
 {% block content %}
 <h1>Hello</h1>
+    {% for product in products %}
+        <ul>
+    <li>{{ product.title }}</li>
+        </ul>
+    {%  endfor %}
 {%  endblock %}
