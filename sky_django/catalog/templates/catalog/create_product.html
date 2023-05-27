@@ -1,17 +1,17 @@
 {% extends 'catalog/base.html' %}
 
-{%  block title %} {% endblock %}
+{% block title %} {% endblock %}
 
-{%  block content %}
+{% block content %}
 
     <div class="container">
-    <h1 class="text-warning">Форма создания продукта</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-    <table>
-        {{ form }}
-    </table>
-    <input type="submit" value="Отправить" >
-</form>
+        <h1 class="text-warning">Форма создания продукта</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {{ form }}
+            </table>
+            <input type="submit" value="Отправить">
+        </form>
     </div>
-{%  endblock %}
+{% endblock %}
