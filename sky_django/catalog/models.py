@@ -1,10 +1,11 @@
 from django.db import models
+from transliterate import translit
 
 
 class Product(models.Model):
     title = models.CharField(max_length=20, verbose_name='Назавание')
     description = models.CharField(max_length=300, verbose_name='Описание')
-    image = models.ImageField(upload_to='media/', verbose_name='Изображение', blank=True, null=True)
+    image = models.ImageField(upload_to='media', verbose_name='Изображение', blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
@@ -17,11 +18,12 @@ class Product(models.Model):
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
 
+
 class Category(models.Model):
     title = models.CharField(max_length=20, verbose_name='Категория')
     description = models.CharField(max_length=300, verbose_name='Описание')
-    # created_at = models.DateTimeField(auto_now_add=True)
 
+    # created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.title}'
@@ -36,11 +38,37 @@ class Contact(models.Model):
     email = models.EmailField()
     site = models.CharField(max_length=30, null=True, blank=True)
 
-
     def __str__(self):
         return f'{self.phone} | {self.email}'
 
     class Meta:
         verbose_name = 'Контакт'
         verbose_name_plural = 'Контакты'
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=20, verbose_name='Заголовок')
+    slug = models.CharField(max_length=30, verbose_name='Слаг')
+    content = models.TextField(verbose_name='Контент')
+    preview = models.ImageField(upload_to='media', verbose_name='Изображение', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
+    is_published = models.BooleanField(default=False, verbose_name='Опубликованно')
+    count_views = models.IntegerField(default=0, verbose_name='Коллчество просмотров')
+
+    def save(self, *args, **kwargs):
+        self.slug = translit(self.title, language_code='ru', reversed=True)
+        super().save(*args, **kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_published = False
+        self.save()
+
+
+    def __str__(self):
+        return f'{self.title} | {self.content[:30]}'
+
+    class Meta:
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
+
 

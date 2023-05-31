@@ -1,12 +1,19 @@
 from django import forms
 from django.forms import ModelForm
 
-from catalog.models import Product
+from catalog.models import Product, Contact, Post
 
 
-class ContactForm(forms.Form):
-    name = forms.CharField(label='Имя', max_length=30)
-    contact = forms.CharField(label='Номер телефона или email', max_length=30)
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ('phone', 'email', 'site')
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'content', 'preview', 'is_published')
+
 
 
 class CreateProductForm(ModelForm):

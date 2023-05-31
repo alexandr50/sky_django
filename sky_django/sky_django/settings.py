@@ -21,6 +21,7 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 PASSWORD = os.environ.get('PASSWORD')
+PASSWORD_YANDEX = os.environ.get('PASSWORD_YANDEX')
 
 
 
@@ -142,4 +143,11 @@ STATICFILES_DIRS = (BASE_DIR / 'static',)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'alexand5051987@yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_PASSWORD = PASSWORD_YANDEX
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True

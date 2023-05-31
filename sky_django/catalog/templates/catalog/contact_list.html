@@ -1,0 +1,22 @@
+{% extends 'catalog/base.html' %}
+
+{%  block title %}
+Котакты
+{%  endblock %}
+
+{% block content %}
+    <div class="container">
+    <h1>Контакты</h1>
+    {%  for obj in object_list %}
+
+        <ul>
+        <li>{{ obj.phone }} || {{ obj.email }}</li>
+        </ul>
+    {%  endfor %}
+
+    <h1>Форма создания контакта</h1>
+        <a class="btn-primary" href="{%  url 'catalog:contact_create' %}">Создать контакт</a>
+
+    </div>
+
+{%  endblock %}

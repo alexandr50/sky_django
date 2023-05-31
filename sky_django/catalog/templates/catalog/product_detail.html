@@ -1,0 +1,27 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+    <div class="container">
+        <h4 class="bg-info">Наименование: {{ object.title }}</h4>
+        <br>
+        <h4 class="bg-info">Описание: {{ object.description }}</h4>
+        <br>
+        <h4 class="bg-info">Категория: {{ object.category }}</h4>
+
+        <br>
+        <h4 class="bg-info">Цена: {{ object.price }}</h4>
+
+        <br>
+        <h4 class="bg-info">Добавлено: {{ object.created_at }}</h4>
+
+        <br>
+        <h4 class="bg-info">Обновлено: {{ object.updated_at }}</h4>
+
+        {% if product.image %}
+
+            <img src="{{ object.image.url }}" alt="img">
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
