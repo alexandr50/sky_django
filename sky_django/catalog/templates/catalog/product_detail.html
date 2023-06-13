@@ -16,6 +16,10 @@
         <br>
         <h4 class="bg-info">Обновлено: {{ object.updated_at }}</h4>
 
+        <h4 class="bg-info">Номер версии: {{ version.number_version }}</h4>
+        <h4 class="bg-info">Название: {{ version.name_version }}</h4>
+
+
         {% if product.image %}
 
             <img src="{{ object.image.url }}" alt="img">

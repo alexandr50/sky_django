@@ -8,7 +8,7 @@
     {% load short_description %}
 
     <div class="container">
-    <h1 class="text-dark">Список продуктов</h1>
+        <h1 class="text-dark">Список продуктов</h1>
 
         {% for object in object_list %}
 
@@ -28,10 +28,21 @@
                             <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                                 <li>- {{ object.description | short_description }}</li>
 
+
+                            {% for ver in object.versions.all %}
+                                {% if ver.is_active %}
+                                    <li>-Назавание версии: {{ ver.name_version }}</li>
+                                    <li>-Номер версии: {{ ver.number_version }}</li>
+                                {% endif %}
+                            {% endfor %}
                             </ul>
+
 
                             <a type="button" href="{% url 'catalog:product_detail' object.id %}"
                                class="btn btn-lg btn-block btn-outline-primary">Детализация</a>
+
+                            <a type="button" href="{% url 'catalog:update_product' object.id %}"
+                               class="btn btn-lg btn-block btn-danger">Изменить</a>
                         </div>
                     </div>
                 </div>

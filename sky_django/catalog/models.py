@@ -19,6 +19,27 @@ class Product(models.Model):
         verbose_name_plural = 'Продукты'
 
 
+class Version(models.Model):
+    product = models.ForeignKey(Product, related_name='versions', on_delete=models.CASCADE, verbose_name='продукт')
+    number_version = models.FloatField(verbose_name='Номер версии')
+    name_version = models.CharField(max_length=30, verbose_name='Название версии')
+    is_active = models.BooleanField(default=False, verbose_name='Активная')
+
+    def save(self, *args, **kwargs):
+        versions = Version.objects.filter(product_id=self.product.id)
+        for version in versions:
+            if version.is_active == True:
+                raise ValueError('У продукта уже есть активная версия')
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.product.title}  {self.name_version}'
+
+    class Meta:
+        verbose_name = 'Версия'
+        verbose_name_plural = 'Версии'
+
+
 class Category(models.Model):
     title = models.CharField(max_length=20, verbose_name='Категория')
     description = models.CharField(max_length=300, verbose_name='Описание')
@@ -63,12 +84,9 @@ class Post(models.Model):
         self.is_published = False
         self.save()
 
-
     def __str__(self):
         return f'{self.title} | {self.content[:30]}'
 
     class Meta:
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
-
-

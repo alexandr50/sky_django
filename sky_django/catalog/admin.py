@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from catalog.models import Product, Category, Contact, Post
+from catalog.models import Product, Category, Contact, Post, Version
 
 
 @admin.register(Product)
@@ -23,3 +23,8 @@ class ContactAdmin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'content', 'slug', 'preview', 'created_at', 'is_published', 'count_views')
+
+
+@admin.register(Version)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('product', 'number_version', 'name_version', 'is_active')

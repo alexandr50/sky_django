@@ -1,9 +1,10 @@
+from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
-from catalog.forms import ContactForm, PostForm
-from catalog.models import Product, Contact, Post
+from catalog.forms import ContactForm, PostForm, CreateProductForm, UpdateProductForm, VersionForm
+from catalog.models import Product, Contact, Post, Version
 from catalog.service import send_email
 
 
@@ -13,12 +14,51 @@ class ProductList(ListView):
         'title': 'Список продуктов'
     }
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # for item in context['object_list']:
+        #     print(item.pk)
+        #     context['version'] = Version.objects.filter(product_id=item.pk)
+
+        return context
+
+class UpdateProduct(UpdateView):
+    model = Product
+    template_name = 'catalog/update_product.html'
+    form_class = CreateProductForm
+
+    def get_success_url(self):
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.kwargs['pk']})
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        if self.request.method == 'POST':
+            context['formset'] = VersionFormset(data=self.request.POST, instance=self.object)
+        else:
+            context['formset'] = VersionFormset(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        return super().form_valid(form)
+
 
 
 class ProductCreate(CreateView):
     model = Product
-    fields = ('title', 'description', 'image', 'price', 'category')
     success_url = reverse_lazy('catalog:product_list')
+    form_class = CreateProductForm
+
+    def form_valid(self, form):
+        form = CreateProductForm(data=self.request.POST)
+        if form.is_valid():
+            form.save()
 
 
 class ContactList(ListView):
@@ -39,6 +79,14 @@ class ContactCreate(CreateView):
 
 class ProductDetail(DetailView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['version'] = Version.objects.filter(product_id=self.kwargs['pk'])
+        for item in context['version']:
+            if item.is_active == True:
+                context['version'] = item
+        return context
 
 
 
