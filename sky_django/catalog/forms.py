@@ -22,6 +22,12 @@ class PostForm(StyleFormMixin, forms.ModelForm):
         model = Post
         fields = ('title', 'content', 'preview', 'is_published')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['is_published'].widget.attrs['class'] = 'form-choice'
+
 
 
 class CreateProductForm(StyleFormMixin, forms.ModelForm):

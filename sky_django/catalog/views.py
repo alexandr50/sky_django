@@ -1,6 +1,7 @@
 from django.forms import inlineformset_factory
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import ContactForm, PostForm, CreateProductForm, UpdateProductForm, VersionForm
@@ -59,6 +60,7 @@ class ProductCreate(CreateView):
         form = CreateProductForm(data=self.request.POST)
         if form.is_valid():
             form.save()
+        return HttpResponseRedirect(reverse('catalog:product_list'))
 
 
 class ContactList(ListView):
