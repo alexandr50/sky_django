@@ -1,8 +1,11 @@
 from django.db import models
 from transliterate import translit
 
+from users.models import User
+
 
 class Product(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='создатель')
     title = models.CharField(max_length=20, verbose_name='Назавание')
     description = models.CharField(max_length=300, verbose_name='Описание')
     image = models.ImageField(upload_to='media', verbose_name='Изображение', blank=True, null=True)

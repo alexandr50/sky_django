@@ -1,6 +1,7 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
     <div class="container">
+        <h4 class="bg-info">Создатель: {{ object.user.email }}</h4>
         <h4 class="bg-info">Наименование: {{ object.title }}</h4>
         <br>
         <h4 class="bg-info">Описание: {{ object.description }}</h4>
@@ -20,9 +21,9 @@
         <h4 class="bg-info">Название: {{ version.name_version }}</h4>
 
 
-        {% if product.image %}
+        {% if object.image %}
 
-            <img src="{{ object.image.url }}" alt="img">
+            <img src="{{ object.image.url }}" alt="img" width="100" height="100">
         {% endif %}
 
     </div>

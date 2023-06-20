@@ -1,0 +1,24 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h1>Авторизация</h1>
+        <form action="{% url 'users:login' %}" method="post">
+            {% csrf_token %}
+            <table>
+               {{ form.as_table }}
+            </table>
+            <input type="submit" value="Войти">
+        </form>
+        <br>
+        <div class="card-footer text-center">
+            <div class="bg-light"><a href="{% url 'users:register' %}">Нужен аккаунт? Зарегистрируйся!</a></div>
+
+
+        </div>
+    </div>
+
+
+{% endblock %}

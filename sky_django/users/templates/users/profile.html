@@ -1,0 +1,32 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <form action="{% url 'users:profile' object.id %} " method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="img-fluid">
+                  <img width="150" height="200"
+                      src="{% if user.avatar %} {{ user.avatar.url }} {% else %}Нет аватара{% endif %}"
+
+                        class="rounded float-right">
+              </div>
+        {{ form }}
+            <div class="form-row">
+                <div class="col-lg-12" style="margin-top: 33px;">
+                    <input class="btn btn-info btn-block" type="submit" value="Сохранить">
+                </div>
+            </div>
+        </form>
+
+    <a href="{% url 'users:generate_password' %}" class="btn-warning">Сгенерировать пароль</a>
+    </div>
+
+
+
+
+
+{% endblock %}

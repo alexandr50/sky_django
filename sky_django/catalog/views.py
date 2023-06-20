@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import ContactForm, PostForm, CreateProductForm, UpdateProductForm, VersionForm
@@ -9,6 +11,7 @@ from catalog.models import Product, Contact, Post, Version
 from catalog.service import send_email
 
 
+@method_decorator(login_required, name='dispatch')
 class ProductList(ListView):
     model = Product
     extra_context = {
@@ -23,6 +26,7 @@ class ProductList(ListView):
 
         return context
 
+@method_decorator(login_required, name='dispatch')
 class UpdateProduct(UpdateView):
     model = Product
     template_name = 'catalog/update_product.html'
@@ -50,7 +54,7 @@ class UpdateProduct(UpdateView):
         return super().form_valid(form)
 
 
-
+@method_decorator(login_required, name='dispatch')
 class ProductCreate(CreateView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
@@ -59,7 +63,9 @@ class ProductCreate(CreateView):
     def form_valid(self, form):
         form = CreateProductForm(data=self.request.POST)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)
+            product.user = self.request.user
+            product.save()
         return HttpResponseRedirect(reverse('catalog:product_list'))
 
 
@@ -78,7 +84,7 @@ class ContactCreate(CreateView):
 
 
 
-
+@method_decorator(login_required, name='dispatch')
 class ProductDetail(DetailView):
     model = Product
 
