@@ -40,9 +40,10 @@
 
                             <a type="button" href="{% url 'catalog:product_detail' object.id %}"
                                class="btn btn-lg btn-block btn-outline-primary">Детализация</a>
-
+                            {% if perms.catalog.change_product %}
                             <a type="button" href="{% url 'catalog:update_product' object.id %}"
                                class="btn btn-lg btn-block btn-danger">Изменить</a>
+                        {%  endif %}
                         </div>
                     </div>
                 </div>

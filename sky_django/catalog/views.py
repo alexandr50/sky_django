@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.forms import inlineformset_factory
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
@@ -30,10 +31,19 @@ class ProductList(ListView):
 class UpdateProduct(UpdateView):
     model = Product
     template_name = 'catalog/update_product.html'
-    form_class = CreateProductForm
+    form_class = UpdateProductForm
+    # permission_required = 'catalog.change_product'
 
     def get_success_url(self):
         return reverse_lazy('catalog:product_detail', kwargs={'pk': self.kwargs['pk']})
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.user != self.request.user:
+            raise Http404("Вы не являетесь владельцем продукта.")
+        return obj
+
+
 
 
     def get_context_data(self, **kwargs):
@@ -52,6 +62,16 @@ class UpdateProduct(UpdateView):
             formset.instance = self.object
             formset.save()
         return super().form_valid(form)
+
+class ProductsDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Product
+    success_url = reverse_lazy('catalog:products')
+
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
 
 
 @method_decorator(login_required, name='dispatch')

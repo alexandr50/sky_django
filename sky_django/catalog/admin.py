@@ -8,6 +8,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'price', 'title', 'category')
     list_filter = ('category',)
     search_fields = ('title', 'description')
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(Category)

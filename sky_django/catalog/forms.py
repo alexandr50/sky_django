@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, DateTimeInput
 
 from catalog.models import Product, Contact, Post, Version
 
@@ -33,7 +35,12 @@ class PostForm(StyleFormMixin, forms.ModelForm):
 class CreateProductForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Product
-        fields = ('title', 'description', 'image', 'price', 'category')
+        fields = ('title', 'description', 'image', 'price', 'category', 'is_published')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_published'].widget.attrs['class'] = 'form-choice'
+        self.fields['category'].widget.attrs['class'] = 'form-choice'
 
     def clean_title(self):
         cleaned_data = self.cleaned_data.get('title').lower()
@@ -49,10 +56,19 @@ class CreateProductForm(StyleFormMixin, forms.ModelForm):
         return cleaned_data
 
 
-class UpdateProductForm(StyleFormMixin, forms.ModelForm):
+class UpdateProductForm(forms.ModelForm):
+
+
     class Meta:
         model = Product
-        fields = ('title', 'description', 'image', 'price', 'category')
+        fields = ('title', 'description', 'image', 'price', 'category', 'is_published')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['is_published'].widget.attrs['class'] = 'form-choice'
+        self.fields['category'].widget.attrs['class'] = 'form-choice'
 
 
 

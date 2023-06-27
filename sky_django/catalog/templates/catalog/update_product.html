@@ -8,9 +8,14 @@
         <h1 class="text-warning">Форма обновления продукта</h1>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <table>
-                {{ form}}
-            </table>
+
+
+
+                        <table>
+
+                            {{ form }}
+
+                        </table>
             <h1>------------------------------</h1>
             <table>
                 {{ formset.management_form }}
@@ -19,8 +24,10 @@
                 {% endfor %}
             </table>
             <input class="btn-success" type="submit" value="Изменить">
+        {% if user.is_superuser %}
             <a type="button" href="{% url 'catalog:delete_post' object.id %}"
                class="btn btn-lg btn-block btn-danger">Удалить</a>
+        {%  endif %}
         </form>
     </div>
 {% endblock %}
