@@ -22,6 +22,8 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 PASSWORD = os.environ.get('PASSWORD')
 PASSWORD_YANDEX = os.environ.get('PASSWORD_YANDEX')
+SECRET_KEY_ENV = os.environ.get('SECRET_KEY')
+LOCATION = os.environ.get('LOCATION')
 
 
 
@@ -33,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r#kt+c4ujw7ijy6+bi2m53pbax8l0-m704q2_tp(h-sk%9l+!v'
+SECRET_KEY = SECRET_KEY_ENV
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -157,3 +159,14 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/users/login'
+
+CACHE_ENABLED = True
+
+if CACHE_ENABLED:
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": LOCATION,
+        }
+    }

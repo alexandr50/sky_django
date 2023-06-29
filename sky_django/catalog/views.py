@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import ContactForm, PostForm, CreateProductForm, UpdateProductForm, VersionForm
@@ -101,7 +102,6 @@ class ContactCreate(CreateView):
     form_class = ContactForm
     template_name = 'catalog/contact_create.html'
     success_url = reverse_lazy('catalog:contact_list')
-
 
 
 @method_decorator(login_required, name='dispatch')
