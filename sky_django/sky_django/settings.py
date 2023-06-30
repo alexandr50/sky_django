@@ -17,9 +17,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
-if os.path.exists(dotenv_path):
-    load_dotenv(dotenv_path)
+
 PASSWORD = os.environ.get('PASSWORD')
 PASSWORD_YANDEX = os.environ.get('PASSWORD_YANDEX')
 SECRET_KEY_ENV = os.environ.get('SECRET_KEY')
@@ -30,12 +28,14 @@ LOCATION = os.environ.get('LOCATION')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY_ENV
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -93,11 +93,11 @@ WSGI_APPLICATION = 'sky_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_django',
-        'USER': 'postgres',
-        'PASSWORD': PASSWORD,
-        'HOST': '127.0.0.1',
-        'PORT': 5432,
+        'NAME': os.getenv('NAME_DB'),
+        'USER': os.getenv('USER_DB'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST_DB'),
+        'PORT': os.getenv('PORT_DB'),
     }
 }
 
@@ -151,7 +151,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST_USER = 'alexand5051987@yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_PASSWORD = PASSWORD_YANDEX
+EMAIL_HOST_PASSWORD = os.getenv('PASSWORD_YANDEX')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
@@ -160,13 +160,13 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/users/login'
 
-CACHE_ENABLED = True
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'
 
 if CACHE_ENABLED:
 
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": LOCATION,
+            "LOCATION": os.getenv('LOCATION'),
         }
     }
