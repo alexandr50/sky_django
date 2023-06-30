@@ -18,11 +18,6 @@ from pathlib import Path
 
 
 
-PASSWORD = os.environ.get('PASSWORD')
-PASSWORD_YANDEX = os.environ.get('PASSWORD_YANDEX')
-SECRET_KEY_ENV = os.environ.get('SECRET_KEY')
-LOCATION = os.environ.get('LOCATION')
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
